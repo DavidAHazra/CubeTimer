@@ -1,5 +1,3 @@
-- Cloud deployment (Openshift, BlueMix, Heroku, etc...)
-- Deployment with npm start
 - Include URL
 
 - README.md explaining how to use site and API
@@ -18,3 +16,6 @@
 - Use eslint (ran with 'npm pretest')
 
 - HTML Validator
+
+- Cloud deployment (Openshift, BlueMix, Heroku, etc...)
+- Deployment with npm start

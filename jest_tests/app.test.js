@@ -166,13 +166,6 @@ describe('Testing static_serve.js routes', () => {
             });    
         });
 
-        describe('Testing GET /static/about/about.css', () => {
-            test('Should respond with status code 200', async () => {
-                const response = await request(app).get('/static/about/about.css');
-                expect(response.statusCode).toBe(200);
-            });    
-        });
-
         describe('Testing GET /static/login/login.css', () => {
             test('Should respond with status code 200', async () => {
                 const response = await request(app).get('/static/login/login.css');
