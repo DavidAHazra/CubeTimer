@@ -1,0 +1,32 @@
+{
+  "name": "marketview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./server.js",
+    "pretest": "eslint ./routes/*",
+    "test": "jest"
+  },
+  "author": "DavidAHazra",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "buffer-replace": "^1.0.0",
+    "compression": "^1.7.4",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "express-session": "^1.16.1",
+    "jest": "^24.7.1",
+    "node-fetch": "^2.4.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "supertest": "^4.0.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "*.json"
+    ]
+  }
+}

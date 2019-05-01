@@ -1,0 +1,20 @@
+- Cloud deployment (Openshift, BlueMix, Heroku, etc...)
+- Deployment with npm start
+- Include URL
+
+- README.md explaining how to use site and API
+- Don't include node_modules
+
+============== DONE ==============
+- Click on timer to start / stop NON-LOGIN TOO      
+- Hold spacebar / timer NON-LOGIN TOO
+
+- Home button on login / registration
+- External Web service (image service)
+- About page
+- Add status codes to responses
+
+- Write jest test cases (ran with 'npm test')
+- Use eslint (ran with 'npm pretest')
+
+- HTML Validator

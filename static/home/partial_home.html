@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>3x3 Rubik's Cube Timer</title>
+
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- Custom styles for this template -->
+        <link href="/static/home/home.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow navbar-expand-lg">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">
+                <img src="/static/home/logo.png" class="logo" alt="Logo">
+                3x3 Rubik's Cube Timer
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/about">About</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Learn How to Solve
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="https://solvethecube.com/">Beginner's Method</a>
+                            <a class="dropdown-item" href="https://solvethecube.com/speedcubing">Speedcubing (CFOP)</a>
+                            <a class="dropdown-item" href="http://algdb.net/puzzle/333">All Algorithms!</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+                                    
+
+            <div class="navbar-buttons">
+                <a href="/login" class="btn btn-outline-success">Login</a>
+                <a href="/register" class="btn btn-outline-warning">Register</a>
+            </div>
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
+                    <div class="sidebar-sticky">
+                        <div class="nav flex-column">
+                            <hr>
+
+                            <a class="nav-link active text-center" href="/login">
+                                Log In to view your previous times and statistics
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">                    
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            </div>
+
+            <div id="top-div" class="text-center">
+                <img id="visual" src="/static/home/logo.png" alt="Cube Image">
+            </div>
+
+            <p id="turn-list" class="border-bottom text-center h1"></p>
+            <hr>
+
+            <a href="#" style="text-decoration: none"><h1 id="timer" class="text-center align-content-center text-dark">00:00</h1></a>
+            <h2 id="spacebar-text" class="text-center align-content-center text-muted">[Spacebar] to Begin Timer</h2>
+        </div>
+
+        <!-- Timer JavaScript -->
+        <script>
+            let timer_on = false;
+            let timer_value = 0;
+            let timer_function = undefined;
+
+            function set_move_list() {
+                const MOVES = ["R", "R'", "L", "L'", "U", "U'", "D", "D'", "F", "F'", "B", "B'", "R2", "L2", "U2", "D2", "F2", "B2"];
+                let move_list = [];
+
+                // Populate move list
+                while (move_list.length < 20) {
+                    const selected_move = MOVES[Math.floor(Math.random() * MOVES.length)];
+
+                    if (move_list.length !== 0) {
+                        const previous_move = move_list[move_list.length - 1];
+
+                        if (selected_move[0] === previous_move[0]) {
+                            // Need to modify move
+                            move_list.pop();
+
+                            const previous_prime = previous_move.includes("'");
+                            const selected_prime = selected_move.includes("'");
+                            
+                            const previous_double = previous_move.includes('2');
+                            const selected_double = selected_move.includes('2');
+
+                            const previous_regular = !previous_prime && !previous_double;
+                            const selected_regular = !selected_prime && !selected_double;
+
+                            if ((previous_regular && selected_regular) || (previous_prime && selected_prime)) {
+                                move_list.push(selected_move[0] + '2');
+
+                            } else if ((previous_double && selected_regular) || (previous_regular && selected_double)) {
+                                move_list.push(selected_move[0] + "'");
+
+                            } else if ((previous_prime && selected_double) || (previous_double && selected_prime)) {
+                                move_list.push(selected_move[0]);
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    move_list.push(selected_move);
+                }
+
+                document.getElementById('turn-list').innerText = move_list.join(' ');
+
+                // Also set the scrambled image
+                // Request the image from the server, which gets it from a 3rd party API (VisualCube)
+                fetch('/cube_image', {
+                    method: 'POST', 
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ scramble: move_list.join(' ') })
+
+                }).then(response => {
+                    return response.text();
+                    
+                }).then(base64_image => {
+                    document.getElementById('visual').parentNode.removeChild(document.getElementById('visual'));
+
+                    // Create image
+                    let image = document.createElement('img');
+                    image.setAttribute('id', 'visual');
+                    image.setAttribute(
+                        'src',
+                        'data:image/png;base64,' + base64_image
+                    );
+
+                    document.getElementById('top-div').appendChild(image);
+
+                }).catch(reason => {
+                    console.log("Error in /cube_image POST: " + reason);
+                })
+
+            }
+
+            function set_timer(duration_in_ms) {
+                timer_value = duration_in_ms;
+
+                let milliseconds = parseInt((duration_in_ms % 1000) / 100),
+                seconds = Math.floor((duration_in_ms / 1000) % 60),
+                minutes = Math.floor((duration_in_ms / (1000 * 60)) % 60),
+                hours = Math.floor((duration_in_ms / (1000 * 60 * 60)) % 24),
+                display_milliseconds = (duration_in_ms % 1000) / 10;
+
+                hours = (hours < 10) ? "0" + hours : hours;
+                minutes = (minutes < 10) ? "0" + minutes : minutes;
+                seconds = (seconds < 10) ? "0" + seconds : seconds;
+                display_milliseconds = (display_milliseconds < 10) ? "0" + display_milliseconds : display_milliseconds;
+                
+
+                let text = "0.00";
+                if (hours !== "00") {
+                    // No need to display hours unnecessarily
+                    text = hours + ":" + minutes + ":" + seconds + "." + display_milliseconds;
+
+                } else {
+                    text = minutes + ":" + seconds + "." + display_milliseconds;
+                }
+
+                document.getElementById('timer').innerText = text;
+            }
+
+            function timer_action() {
+                // Spacebar was pressed, toggle timer
+
+                if (timer_on) {
+                    // Change the scramble every time the timer stops
+                    set_move_list();
+                    clearInterval(timer_function);
+                    document.getElementById("spacebar-text").innerText = "[Spacebar] to Begin Timer";
+
+                } else {
+                    // Reset clock
+                    set_timer(0);
+
+                    const TIME_DELTA = 10;
+                    timer_function = setInterval(() => {
+                        set_timer(timer_value + TIME_DELTA);
+                    }, TIME_DELTA);
+
+                    document.getElementById('turn-list').innerText = "";
+                    document.getElementById("spacebar-text").innerText = "[Spacebar] to Stop Timer";
+                }
+
+                timer_on = !timer_on;
+            }
+
+            document.onkeyup = function(event) {
+                event = event || window.event;
+                const key_pressed = event.keyCode;
+                
+                if (key_pressed === 32) {
+                    timer_action();
+                }
+            }
+
+            document.getElementById('timer').addEventListener('click', timer_action);
+
+            set_move_list();
+            set_timer(0);
+        </script>
+
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        
+    </body>
+</html>

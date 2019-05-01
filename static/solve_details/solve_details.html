@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>3x3 Rubik's Cube Timer</title>
+
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- Font Awesome Icons -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+        <!-- Custom styles for this template -->
+        <link href="/static/home/home.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow navbar-expand-lg">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/home/USERNAME">
+                <img src="/static/home/logo.png" class="logo" alt="Logo">
+                3x3 Rubik's Cube Timer
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/about">About</a>
+                    </li>
+        
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Learn How to Solve
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="https://solvethecube.com/">Beginner's Method</a>
+                            <a class="dropdown-item" href="https://solvethecube.com/speedcubing">Speedcubing (CFOP)</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="http://algdb.net/puzzle/333">All Algorithms!</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/profile/USERNAME">Your Profile</a>
+                    </li>    
+                </ul>
+            </div>
+    
+            <div class="navbar-buttons text-light">
+                <label style="margin-right: 10px">Hello, USERNAME</label>
+                <a href="/logout" class="btn btn-outline-danger">Log Out</a>
+                <a href="/register" class="btn btn-outline-warning">Register</a>
+            </div>
+        </nav>
+
+        <div class="container-fluid">                
+            <div role="main" class="">                    
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                </div>
+
+                <h1 class="border-bottom text-center">Solve Details</h1>
+                <hr>
+
+                <p id='error-string' class="text-center h1"></p>
+
+                <div class="container">
+                    <table class="table text-center">
+                        <tbody>
+                            <tr>
+                                <th>Solve Index</th>
+                                <td>{INDEX}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Scramble</th>
+                                <td id="scramble-string"></td>
+                            </tr>
+
+                            <tr> 
+                                <th>Solve Time</th>
+                                <td id="solve-time"></td>
+                            </tr>
+
+                            <tr>
+                                <th>Date Solved</th>
+                                <td id="solve-date"></td>
+                            </tr>
+                        </tbody>
+                    </table>                                          
+                </div>
+            </div>
+        </div>
+
+        <!-- Timer JavaScript -->
+        <script>
+            function ms_to_time(duration_in_ms) {
+                timer_value = duration_in_ms;
+
+                let milliseconds = parseInt((duration_in_ms % 1000) / 100),
+                seconds = Math.floor((duration_in_ms / 1000) % 60),
+                minutes = Math.floor((duration_in_ms / (1000 * 60)) % 60),
+                hours = Math.floor((duration_in_ms / (1000 * 60 * 60)) % 24),
+                display_milliseconds = (duration_in_ms % 1000) / 10;
+
+                hours = (hours < 10) ? "0" + hours : hours;
+                minutes = (minutes < 10) ? "0" + minutes : minutes;
+                seconds = (seconds < 10) ? "0" + seconds : seconds;
+                display_milliseconds = Math.round(display_milliseconds * 100) / 100
+                display_milliseconds = (display_milliseconds < 10) ? "0" + display_milliseconds : display_milliseconds;
+
+                let text = "0.00";
+                if (hours !== "00") {
+                    // No need to display hours unnecessarily
+                    text = hours + ":" + minutes + ":" + seconds + "." + display_milliseconds;
+
+                } else {
+                    text = minutes + ":" + seconds + "." + display_milliseconds;
+                }
+
+                return text;
+            }
+
+            // Setting the details
+            fetch("/user_solves/USERNAME", {
+                    method: "GET"
+
+                }).then(response => {
+                    return response.json();
+
+                }).then(user_data => {
+                    const user = user_data[{INDEX}];
+
+                    if (!user) {
+                        document.getElementById('error-string').innerText = "Data does not exist for this solve";
+                        return;
+                    }
+
+
+                    const solve_date = new Date(user.date);
+
+                    document.getElementById('scramble-string').innerText = user.scramble;
+                    document.getElementById('solve-time').innerText = ms_to_time(user.solve_time);
+                    document.getElementById('solve-date').innerText = solve_date.toLocaleDateString();
+                });
+        </script>
+
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>

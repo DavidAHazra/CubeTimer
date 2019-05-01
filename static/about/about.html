@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>3x3 Rubik's Cube Timer</title>
+
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- Font Awesome Icons -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+        <!-- Custom styles for this template -->
+        <link href="/static/home/home.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow navbar-expand-lg">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/home">
+                <img src="/static/home/logo.png" class="logo" alt="Logo">
+                3x3 Rubik's Cube Timer
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/about">About</a>
+                    </li>
+        
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Learn How to Solve
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="https://solvethecube.com/">Beginner's Method</a>
+                            <a class="dropdown-item" href="https://solvethecube.com/speedcubing">Speedcubing (CFOP)</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="http://algdb.net/puzzle/333">All Algorithms!</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container-fluid">                
+            <div role="main" class="">                    
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                </div>
+
+                <h1 class="border-bottom text-center">About / Help</h1>
+                <hr>
+
+                <div class="text-center">
+                    <h2><u>How to Use</u></h2>
+
+                    <h5>Navbar</h5>
+                    <p>Click the logo / title to return to the home page</p>
+                    <p>Learn how to solve the cube, view your profile, login or register from the homepage</p>
+
+                    <br>
+
+                    <h5>Homepage</h5>
+                    <p>Press the spacebar / click the timer to start / stop it</p>
+                    <p>The string at the top is the scramble string, put the white face at the top and green face on the front and apply the algorithm to scramble it</p>
+                    <p>To help with this, an image of what the scramble looks like if done correctly is there (courtesy of <a href="http://cube.crider.co.uk/visualcube.php">VisualCube</a>)</p>
+                
+                    <br>
+
+                    <h5>Sidebar</h5>
+                    <p>The sidebar is there to track your scores, scores can also be viewed in your profile page</p>
+                    <p>Along with tracking your scores, it shows your mean time, and trimmed mean.</p>
+                    <p>Trimmed mean is used in olympic events and speedcubing events alike. It is calculated as follows below (basically the mean without the best and worst)</p>
+                    <p>Trimmed Mean = (Sum(Times) - Min(Times) - Max(Times)) / n</p>
+                
+                    <br>
+
+                    <h5>Security</h5>
+                    <p>Upon registering, your password will be stored as a salted hash</p>
+                    <p>Nobody can access your profile or add / remove times from your history</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
