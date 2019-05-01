@@ -12,7 +12,7 @@ Additional information can be found in the [About](https://rubix-timer.herokuapp
 This website was made to help time yourself when practicing solving a Rubik's Cube.
 For navbar functions, see below.
 
-The string of characters indicate an algorithm that, when performed, produces a unique permutation of the Rubik's cube known as a scramble. The user knows if they've done the scramble correctly by comparing their cube to the diagram on the screen. This image is produced by a third-party API called [VisualCube](http://cube.crider.co.uk/visualcube.php).
+The string of characters on the home page indicate an algorithm that, when performed, produces a unique permutation of the Rubik's cube known as a scramble. The user knows if they've done the scramble correctly by comparing their cube to the diagram on the screen. This image is produced by a third-party API called [VisualCube](http://cube.crider.co.uk/visualcube.php).
 
 To create an account, simply click register then log in.
 
